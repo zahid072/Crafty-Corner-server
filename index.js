@@ -32,7 +32,12 @@ async function run() {
     const artCollection = client.db("DBpainting&drawing").collection("allArts");
 
     // All api
-   
+    //  get data
+    app.get("/allArts", async(req, res)=>{
+      const cursor = artCollection.find()
+      const arts = await cursor.toArray()
+      res.send(arts);
+    })
     // add data
     app.post("/allArts", async (req, res) => {
       const arts = req.body;
