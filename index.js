@@ -46,8 +46,14 @@ async function run() {
       res.send(arts);
     })
    
-    //  get category data
-    
+    //  filter category ways data
+    app.get("/allArts/:names", async(req, res)=>{
+      const names = req.params.names;
+      const filter = {subcategory_Name: names}
+      const cursor = await artCollection.find(filter)
+      const arts = await cursor.toArray()
+      res.send(arts);
+    })
     // add data
     app.post("/allArts", async (req, res) => {
       const arts = req.body;
