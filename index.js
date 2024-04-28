@@ -39,6 +39,13 @@ async function run() {
       const arts = await cursor.toArray()
       res.send(arts);
     })
+    // get category collections
+    app.get("/subCategory", async(req, res)=>{
+      const cursor = categoryCollection.find()
+      const arts = await cursor.toArray()
+      res.send(arts);
+    })
+   
     //  get category data
     
     // add data
@@ -47,7 +54,6 @@ async function run() {
       const result = await artCollection.insertOne(arts);
       res.send(result); 
     });
-    // add category collection
     app.post("/subCategory", async (req, res) => {
       const arts = req.body;
       const result = await categoryCollection.insertOne(arts);
