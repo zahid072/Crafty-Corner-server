@@ -30,6 +30,7 @@ async function run() {
     // await client.connect();
 
     const artCollection = client.db("DBpainting&drawing").collection("allArts");
+    const categoryCollection = client.db("DBpainting&drawing").collection("subCategory");
 
     // All api
     //  get data
@@ -38,10 +39,18 @@ async function run() {
       const arts = await cursor.toArray()
       res.send(arts);
     })
+    //  get category data
+    
     // add data
     app.post("/allArts", async (req, res) => {
       const arts = req.body;
       const result = await artCollection.insertOne(arts);
+      res.send(result); 
+    });
+    // add category collection
+    app.post("/subCategory", async (req, res) => {
+      const arts = req.body;
+      const result = await categoryCollection.insertOne(arts);
       res.send(result); 
     });
 
