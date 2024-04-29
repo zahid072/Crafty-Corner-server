@@ -30,36 +30,38 @@ async function run() {
     // await client.connect();
 
     const artCollection = client.db("DBpainting&drawing").collection("allArts");
-    const categoryCollection = client.db("DBpainting&drawing").collection("subCategory");
+    const categoryCollection = client
+      .db("DBpainting&drawing")
+      .collection("subCategory");
 
     // All api
     //  get data
-    app.get("/allArts", async(req, res)=>{
-      const cursor = artCollection.find()
-      const arts = await cursor.toArray()
+    app.get("/allArts", async (req, res) => {
+      const cursor = artCollection.find();
+      const arts = await cursor.toArray();
       res.send(arts);
-    })
+    });
     // get category collections
-    app.get("/subCategory", async(req, res)=>{
-      const cursor = categoryCollection.find()
-      const arts = await cursor.toArray()
+    app.get("/subCategory", async (req, res) => {
+      const cursor = categoryCollection.find();
+      const arts = await cursor.toArray();
       res.send(arts);
-    })
-   
-    // get single data 
+    });
+
+    // get single data
     app.get("/allArts/:id", async (req, res) => {
-        const id = req.params.id;
-        const filter = { _id: new ObjectId(id) }; 
-        const art = await artCollection.findOne(filter);
-        res.send(art);
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const art = await artCollection.findOne(filter);
+      res.send(art);
     });
     // add data
     app.post("/allArts", async (req, res) => {
       const arts = req.body;
       const result = await artCollection.insertOne(arts);
-      res.send(result); 
+      res.send(result);
     });
-    
+
     // update data
     app.put("/allArts/:id", async (req, res) => {
       const id = req.params.id;
@@ -68,28 +70,28 @@ async function run() {
       const updatedCraft = req.body;
       const craft = {
         $set: {
-          image : updatedCraft.image,
-          item_name : updatedCraft.item_name,
-          subcategory_Name : updatedCraft.subcategory_Name,
-          rating : updatedCraft.rating,
-          price : updatedCraft.price,
-          processing_time : updatedCraft.processing_time,
-          customization : updatedCraft.customization,
-          short_description : updatedCraft.short_description,
-          stockStatus : updatedCraft.stockStatus,
-          user_name : updatedCraft.user_name,
-          email : updatedCraft.email,
+          image: updatedCraft.image,
+          item_name: updatedCraft.item_name,
+          subcategory_Name: updatedCraft.subcategory_Name,
+          rating: updatedCraft.rating,
+          price: updatedCraft.price,
+          processing_time: updatedCraft.processing_time,
+          customization: updatedCraft.customization,
+          short_description: updatedCraft.short_description,
+          stockStatus: updatedCraft.stockStatus,
+          user_name: updatedCraft.user_name,
+          email: updatedCraft.email,
         },
       };
       const result = await artCollection.updateOne(filter, craft, options);
       res.send(result);
     });
-    // delete data 
+    // delete data
     app.delete("/allArts/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await artCollection.deleteOne(query);
-      res.send(result); 
+      res.send(result);
     });
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
