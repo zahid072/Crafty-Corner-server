@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 require("dotenv").config();
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const port = process.env.PORT || 5000;
 
 // middleware
@@ -46,30 +46,29 @@ async function run() {
       res.send(arts);
     })
    
-    //  filter category ways data
-    app.get("/allArts/:names", async(req, res)=>{
-      const names = req.params.names;
-      const filter = {subcategory_Name: names}
-      const cursor = await artCollection.find(filter)
-      const arts = await cursor.toArray()
-      res.send(arts);
-    })
+    // get single data 
+    app.get("/allArts/:id", async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) }; 
+        const art = await artCollection.findOne(filter);
+        res.send(art);
+    });
     // add data
     app.post("/allArts", async (req, res) => {
       const arts = req.body;
       const result = await artCollection.insertOne(arts);
       res.send(result); 
     });
-    app.post("/subCategory", async (req, res) => {
-      const arts = req.body;
-      const result = await categoryCollection.insertOne(arts);
-      res.send(result); 
-    });
-
+    
     // update data
     
-    // delete data
-
+    // delete data 
+    app.delete("/allArts/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await artCollection.deleteOne(query);
+      res.send(result); 
+    });
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
     console.log(
