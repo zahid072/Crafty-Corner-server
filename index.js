@@ -61,7 +61,29 @@ async function run() {
     });
     
     // update data
-    
+    app.put("/allArts/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedCraft = req.body;
+      const craft = {
+        $set: {
+          image : updatedCraft.image,
+          item_name : updatedCraft.item_name,
+          subcategory_Name : updatedCraft.subcategory_Name,
+          rating : updatedCraft.rating,
+          price : updatedCraft.price,
+          processing_time : updatedCraft.processing_time,
+          customization : updatedCraft.customization,
+          short_description : updatedCraft.short_description,
+          stockStatus : updatedCraft.stockStatus,
+          user_name : updatedCraft.user_name,
+          email : updatedCraft.email,
+        },
+      };
+      const result = await artCollection.updateOne(filter, craft, options);
+      res.send(result);
+    });
     // delete data 
     app.delete("/allArts/:id", async (req, res) => {
       const id = req.params.id;
